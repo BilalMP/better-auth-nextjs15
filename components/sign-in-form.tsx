@@ -4,7 +4,7 @@ import { signInSchema } from "@/lib/schema";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useTransition } from "react";
+import { useState} from "react";
 import {
     Card,
     CardContent,
@@ -25,12 +25,14 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/auth-client";
 import { ErrorContext } from "better-auth/react";
 
 const SignInForm = () => {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const redirect = searchParams.get("redirect");
     const [isPending, setIsPending] = useState<boolean>(false);
 
     const form = useForm<z.infer<typeof signInSchema>>({
@@ -52,7 +54,8 @@ const SignInForm = () => {
                     setIsPending(true);
                 },
                 onSuccess: async () => {
-                    router.push("/");
+                    form.reset();
+                    router.push(redirect ?? "/");
                     router.refresh();
                 },
                 onError: (ctx: ErrorContext) => {
@@ -64,10 +67,10 @@ const SignInForm = () => {
         setIsPending(false);
     };
     return (
-        <Card className="w-[400px]">
+        <Card className="w-[400px] bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
             <CardHeader>
-                <CardTitle>Sign In</CardTitle>
-                <CardDescription>Sign in to your account</CardDescription>
+                <CardTitle className="text-slate-900 dark:text-slate-100">Sign In</CardTitle>
+                <CardDescription className="text-slate-600 dark:text-slate-400">Sign in to your account</CardDescription>
             </CardHeader>
             <CardContent>
                 <Form {...form}>
@@ -112,7 +115,7 @@ const SignInForm = () => {
                         <div className="flex justify-end">
                             <Link
                                 href="/forgot-password"
-                                className="text-xs hover:underline text-gray-600"
+                                className="text-xs hover:underline text-gray-600 dark:text-slate-400"
                             >
                                 Forgot Password?
                             </Link>
@@ -131,7 +134,7 @@ const SignInForm = () => {
             <CardFooter className="flex justify-center items-center">
                 <Link
                     href="/signup"
-                    className="text-xs hover:underline text-gray-600"
+                    className="text-xs hover:underline text-gray-600 dark:text-slate-400"
                 >
                     Create an account
                 </Link>
