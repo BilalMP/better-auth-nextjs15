@@ -1,42 +1,29 @@
-import { object, string } from "zod"
+import * as z from "zod";
 
-const getPasswordSchema = (type: "Password" | "Confirm Password") =>
-    string({ required_error: `${type} is required`})
-        .min(8, `${type} must be atleast 8 characters`)
-        .max(32, `${type} must at most 32 characters`);
-
-const getEmailSchema = () =>
-    string({ required_error: "Email is required" })
-        .min(1, "Email is required")
-        .email("invalid email address");
-
-const getNameSchema = () =>
-    string({ required_error: "Name is required" })
-        .min(1, "Name is required")
-        .max(50, "Name must be at least 50 characters");
-
-export const signUpSchema = object({
-    name: getNameSchema(),
-    email: getEmailSchema(),
-    password: getPasswordSchema("Password"),
-    confirmPassword: getPasswordSchema("Confirm Password"),
+export const signUpSchema = z.object({
+    name: z.string().min(2, { message: "Name must be at least 2 characters" }).max(20, { message: "Name must be at most 20 characters" }),
+    email: z.string({ message: "Email should be text and required" }).includes("@", { message: "Invalid email" }),
+    address: z.string({ message: "Address is required" }).min(2, { message: "Address must be at least 2 characters" }).max(20, { message: "Address must be at most 20 characters" }),
+    phoneNumber: z.string({ message: "Phone Number is required" }).min(2, { message: "Phone Number must be at least 2 characters" }).max(10, { message: "Phone Number must be at most 10 characters" }),
+    password: z.string({message:"Password is required"}).min(8,{message:"Password must be at least 8 characters"}).max(20,{message:"Password must be at most 20 characters"}),
+    confirmPassword: z.string({ message: "Password is required" }).min(8, { message: "Password must be at least 8 characters" }).max(20, { message: "Password must be at most 20 characters" }), 
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Password dont match",
     path: ["confirmPassword"]
 });
 
-export const signInSchema = object({
-    email: getEmailSchema(),
-    password: getPasswordSchema("Password")
+export const signInSchema = z.object({
+    email: z.string({ message: "Email should be text and required" }).includes("@", { message: "Invalid email" }),
+    password: z.string({ message: "Password is required" }).min(8, { message: "Password must be at least 8 characters" }).max(20, { message: "Password must be at most 20 characters" }),
 });
 
-export const forgotPasswordSchema = object({
-    email: getEmailSchema(),
+export const forgotPasswordSchema = z.object({
+    email: z.string({ message: "Email should be text and required" }).includes("@", { message: "Invalid email" }),
 });
 
-export const resetPasswordSchema = object({
-    password: getPasswordSchema("Password"),
-    confirmPassword: getPasswordSchema("Confirm Password"),
+export const resetPasswordSchema = z.object({
+    password:z.string({ message: "Password is required" }).min(8, { message: "Password must be at least 8 characters" }).max(20, { message: "Password must be at most 20 characters" }),
+    confirmPassword: z.string({ message: "Password is required" }).min(8, { message: "Password must be at least 8 characters" }).max(20, { message: "Password must be at most 20 characters" }),
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Password dont match",
     path: ["confirmPassword"],
