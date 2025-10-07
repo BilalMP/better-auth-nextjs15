@@ -46,7 +46,7 @@ const ResetPasswordForm = () => {
 
     const onSubmit = async (value: z.infer<typeof resetPasswordSchema>) => {
         setIsPending(true);
-        const { error, data } = await authClient.resetPassword({
+        const { error} = await authClient.resetPassword({
             newPassword: value.password,
             token: token as string,
         });
@@ -54,8 +54,9 @@ const ResetPasswordForm = () => {
             console.log(error);
             toast("Something went wrong. Please try again later");
         } else {
-            toast("Success");
-            router.push("/sign-in");
+            toast("Password reset successfully. Please login");
+            setTimeout(() => router.push("/sign-in"), 3000);
+            form.reset();
         }
         setIsPending(false);
     };
@@ -63,15 +64,15 @@ const ResetPasswordForm = () => {
     if (error === "invalid_token") {
         return (
             <div className="grow flex items-center justify-center p-4">
-                <Card className="w-full max-w-md">
+                <Card className="w-full max-w-md bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
                     <CardHeader>
-                        <CardTitle className="text-3xl font-bold text-center text-gray-800">
+                        <CardTitle className="text-3xl font-bold text-center text-gray-800 dark:text-slate-100">
                             Invalid Reset Link
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">
-                            <p className="text-center text-gray-600">
+                            <p className="text-center text-gray-600 dark:text-slate-400">
                                 This password reset link is invalid or has
                                 expired.
                             </p>
@@ -84,10 +85,10 @@ const ResetPasswordForm = () => {
 
     return (
         <Suspense>
-            <Card className="w-[400px]">
+            <Card className="w-[400px] bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
                 <CardHeader>
-                    <CardTitle>Reset Password</CardTitle>
-                    <CardDescription>Reset your password.</CardDescription>
+                    <CardTitle className="text-slate-900 dark:text-slate-100">Reset Password</CardTitle>
+                    <CardDescription className="text-slate-600 dark:text-slate-400">Reset your password.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
@@ -143,7 +144,7 @@ const ResetPasswordForm = () => {
                 <CardFooter className="flex justify-center items-center ">
                     <Link
                         href="/signin"
-                        className="text-xs hover:underline text-gray-600"
+                        className="text-xs hover:underline text-gray-600 dark:text-slate-400"
                     >
                         Already registered?
                     </Link>
