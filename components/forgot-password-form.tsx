@@ -50,15 +50,16 @@ const ForgotPasswordForm = () => {
             toast(
                 "If an account exists with this email, you will receive a password reset link."
             );
+            form.reset();
         }
         setIsPending(false);
     };
 
     return (
-        <Card className="w-[400px]">
+        <Card className="w-[400px] bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
             <CardHeader>
-                <CardTitle>Forgot Password</CardTitle>
-                <CardDescription>Forgot your password?</CardDescription>
+                <CardTitle className="text-slate-900 dark:text-slate-100">Forgot Password</CardTitle>
+                <CardDescription className="text-slate-600 dark:text-slate-400">Forgot your password?</CardDescription>
             </CardHeader>
             <CardContent>
                 <Form {...form}>
@@ -97,7 +98,7 @@ const ForgotPasswordForm = () => {
             <CardFooter className="flex justify-center items-center ">
                 <Link
                     href="/signin"
-                    className="text-xs hover:underline text-gray-600"
+                    className="text-xs hover:underline text-gray-600 dark:text-slate-400"
                 >
                     Already registered?
                 </Link>
