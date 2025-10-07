@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import Navbar from "@/components/Navbar";
+import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -12,11 +13,21 @@ export default function RootLayout({
     children,
 }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <html lang="en">
+        <html
+            lang="en"
+            suppressHydrationWarning
+        >
             <body className="min-h-screen antialiased flex flex-col">
-                <Navbar />
-                <main>{children}</main>
-                <Toaster />
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                    disableTransitionOnChange
+                >
+                    <Navbar />
+                    <main>{children}</main>
+                    <Toaster />
+                </ThemeProvider>
             </body>
         </html>
     );
