@@ -35,6 +35,8 @@ const SignUpForm = () => {
         defaultValues: {
             name: "",
             email: "",
+            address: "",
+            phoneNumber: "",
             password: "",
             confirmPassword: "",
         },
@@ -46,6 +48,9 @@ const SignUpForm = () => {
                 email: values.email,
                 password: values.password,
                 name: values.name,
+                address: values.address,
+                phoneNumber: values.phoneNumber,
+                role: "ADMIN",
             },
             {
                 onRequest: () => {
@@ -67,10 +72,10 @@ const SignUpForm = () => {
 
     return (
         <div className="grow flex mt-10 items-center justify-center p-4">
-            <Card className="w-[400px]">
+            <Card className="w-[400px] bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
                 <CardHeader>
-                    <CardTitle>Sign Up</CardTitle>
-                    <CardDescription>Create a new account</CardDescription>
+                    <CardTitle className="text-slate-900 dark:text-slate-100">Sign Up</CardTitle>
+                    <CardDescription className="text-slate-600 dark:text-slate-400">Create a new account</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
@@ -106,6 +111,40 @@ const SignUpForm = () => {
                                                 placeholder="example@example.com"
                                                 {...field}
                                                 type="email"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="address"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Address</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Address"
+                                                {...field}
+                                                type="text"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="phoneNumber"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Phone Number</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Phone Number"
+                                                {...field}
+                                                type="text"
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -160,7 +199,7 @@ const SignUpForm = () => {
                 <CardFooter className="flex justify-center items-center">
                     <Link
                         href="/sign-in"
-                        className="text-xs hover:underline text-gray-600"
+                        className="text-xs hover:underline text-gray-600 dark:text-slate-400"
                     >
                         Already have an account
                     </Link>
