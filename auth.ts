@@ -18,14 +18,31 @@ export const auth = betterAuth({
     user: {
         changeEmail: {
             enabled: true,
-            sendChangeEmailVerification: async ({ newEmail, url }) => {
+            sendChangeEmailVerification: async ({ user, newEmail, url }) => {
                 await sendEmail({
-                    to: newEmail,
-                    subject: "Email Change Verification",
-                    body: `Click this link to verify your email change: ${url}`
+                    to: user.email,
+                    subject: "Approve email change",
+                    body: `Your email has been changed to ${newEmail}. Click on the link to appove change: ${url}`
                 });
             },
         },
+        additionalFields: {
+            role: {
+                type: "string",
+                defaultValue: "USER",
+                input: true,
+            },
+            address: {
+                type: "string",
+                required: false,
+                input: true,
+            },
+            phoneNumber: {
+                type: "string",
+                required: false,
+                input: true,
+            },
+        }
     },
     emailAndPassword: {
         enabled: true,
@@ -41,15 +58,15 @@ export const auth = betterAuth({
     emailVerification: {
         sendOnSignUp: true,
         autoSignInAfterVerification: true,
-        sendVerificationEmail: async ({ user, token }) => {
-            const verfificationUrl = `${process.env.BETTER_AUTH_URL}/api/auth/verify-email?token=${token}&callbackURL=${process.env.EMAIL_VERIFICATION_CALLBACK_URL}`;
+        sendVerificationEmail: async ({ user, token, url }) => {
             await sendEmail({
                 to: user.email,
                 subject: "Email Verification",
-                body: `Click this link to verify your email: ${verfificationUrl}`
+                body: `Click this link to verify your email: ${url}`
             });
         },
     },
 } satisfies BetterAuthOptions)
 
-export type Session = typeof auth.$Infer.Session;
+export type Session = typeof auth.$Infer.Session.session;
+export type User = typeof auth.$Infer.Session.user;
